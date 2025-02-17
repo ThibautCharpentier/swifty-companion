@@ -1,27 +1,44 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, StyleSheet, ImageBackground, TextInput, Image, Animated, Keyboard, Dimensions } from 'react-native';
 
+const spacing = 30
+
 export default function SearchScreen() {
 	const [searchLogin, setSearchLogin] = useState('');
 	const translateY = useRef(new Animated.Value(0)).current;
+	const opacity = useRef(new Animated.Value(1)).current;
 
 	const screenHeight = Dimensions.get('window').height;
 
 	useEffect(() => {
 		const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-		  Animated.timing(translateY, {
-			toValue: -screenHeight / 3,
-			duration: 100,
-			useNativeDriver: true,
-		  }).start();
+			Animated.parallel([
+				Animated.timing(translateY, {
+					toValue: -screenHeight / 2 - spacing,
+					duration: 100,
+					useNativeDriver: true,
+				}),
+				Animated.timing(opacity, {
+					toValue: 0,
+					duration: 100,
+					useNativeDriver: true,
+				}),
+			]).start();
 		});
 	
 		const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-		  Animated.timing(translateY, {
-			toValue: 0,
-			duration: 100,
-			useNativeDriver: true,
-		  }).start();
+			Animated.parallel([
+				Animated.timing(translateY, {
+					toValue: 0,
+					duration: 100,
+					useNativeDriver: true,
+				}),
+				Animated.timing(opacity, {
+					toValue: 1,
+					duration: 100,
+					useNativeDriver: true,
+				}),
+			]).start();
 		});
 	
 		return () => {
@@ -39,9 +56,9 @@ export default function SearchScreen() {
 			>
 				<SafeAreaView style={styles.container}>
 					<Animated.View style={[styles.animatedContainer, { transform: [{ translateY }] }]}>
-						<Image 
+						<Animated.Image 
 							source={require('../../../assets/search/logo42.png')}
-							style={styles.logo}
+							style={[styles.logo, { opacity: opacity }]}
 						/>
 						<TextInput
 							style={styles.searchLogin}
@@ -62,7 +79,7 @@ const styles = StyleSheet.create({
     	flex: 1,
     	alignItems: 'center',
     	justifyContent: 'center',
-		backgroundColor: "#0005",
+		backgroundColor: "#0003",
   	},
 	backgroundImage: {
 		flex: 1,
@@ -77,7 +94,7 @@ const styles = StyleSheet.create({
 	logo: {
 		height: 125,
 		width: 125,
-		marginBottom: 30,
+		marginBottom: spacing,
 	},
 	searchLogin: {
 		backgroundColor: "#0005",
