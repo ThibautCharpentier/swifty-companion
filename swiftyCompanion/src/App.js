@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -6,15 +6,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import SearchScreen from './screens/search/SearchScreen';
+import { ErrorApiProvider, useErrorApi } from './context/ErrorApi';
+import { getToken } from './utils/Token';
 
 const Stack = createStackNavigator();
 
-export default function App() {
-  
+export function SwiftyCompanion() {
+	const { errorApi, setErrorApi } = useErrorApi()
+
 	useEffect(() => {
 		NavigationBar.setVisibilityAsync('hidden');
 		NavigationBar.setBackgroundColorAsync('transparent');
 		NavigationBar.setBehaviorAsync('overlay-swipe');
+		if (!getToken())
+			setErrorApi("Erreur lors de la connexion à l'API 42")
 	}, []);
 
 	return (
@@ -32,6 +37,15 @@ export default function App() {
                 </Stack.Navigator>
             </NavigationContainer>
 		</>
+	);
+}
+
+export default function App() {
+  
+	return (
+		<ErrorApiProvider>
+			<SwiftyCompanion/>
+		</ErrorApiProvider>
 	);
 }
 

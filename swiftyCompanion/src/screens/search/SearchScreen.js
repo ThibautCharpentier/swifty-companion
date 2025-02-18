@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, StyleSheet, ImageBackground, TextInput, Image, Animated, Keyboard, Dimensions } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { SafeAreaView, StyleSheet, ImageBackground, Animated, Keyboard, Dimensions, Text } from 'react-native';
+
+import Input from './Input';
 
 const spacing = 30
 
 export default function SearchScreen() {
-	const [searchLogin, setSearchLogin] = useState('');
 	const translateY = useRef(new Animated.Value(0)).current;
 	const opacity = useRef(new Animated.Value(1)).current;
 
@@ -60,13 +61,8 @@ export default function SearchScreen() {
 							source={require('../../../assets/search/logo42.png')}
 							style={[styles.logo, { opacity: opacity }]}
 						/>
-						<TextInput
-							style={styles.searchLogin}
-							placeholder="Entrez un login"
-							placeholderTextColor="#aaa"
-							value={searchLogin}
-							onChangeText={text => setSearchLogin(text)}
-						/>
+						<Input/>
+						{<Text></Text>}
 					</Animated.View>
 				</SafeAreaView>
 			</ImageBackground>
@@ -96,14 +92,4 @@ const styles = StyleSheet.create({
 		width: 125,
 		marginBottom: spacing,
 	},
-	searchLogin: {
-		backgroundColor: "#0005",
-		borderRadius: 5,
-		paddingVertical: 10,
-		paddingHorizontal: 15,
-		color: "#fff",
-		width: '80%',
-		height: 50,
-		fontSize: 20,
-	}
 });
