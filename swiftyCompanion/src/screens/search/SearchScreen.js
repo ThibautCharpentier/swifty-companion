@@ -1,27 +1,28 @@
 import React, { useEffect, useRef } from 'react';
-import { SafeAreaView, StyleSheet, ImageBackground, Animated, Keyboard, Dimensions, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, ImageBackground, Animated, Keyboard, Dimensions, View } from 'react-native';
 
 import Input from './Input';
+import Error from './Error';
 
-const spacing = 30
+const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
+const spacing = screenWidth / 12
 
 export default function SearchScreen() {
 	const translateY = useRef(new Animated.Value(0)).current;
 	const opacity = useRef(new Animated.Value(1)).current;
-
-	const screenHeight = Dimensions.get('window').height;
 
 	useEffect(() => {
 		const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
 			Animated.parallel([
 				Animated.timing(translateY, {
 					toValue: -screenHeight / 2 - spacing,
-					duration: 100,
+					duration: screenHeight / 6.7,
 					useNativeDriver: true,
 				}),
 				Animated.timing(opacity, {
 					toValue: 0,
-					duration: 100,
+					duration: screenHeight / 6.7,
 					useNativeDriver: true,
 				}),
 			]).start();
@@ -31,12 +32,12 @@ export default function SearchScreen() {
 			Animated.parallel([
 				Animated.timing(translateY, {
 					toValue: 0,
-					duration: 100,
+					duration: screenHeight / 6.7,
 					useNativeDriver: true,
 				}),
 				Animated.timing(opacity, {
 					toValue: 1,
-					duration: 100,
+					duration: screenHeight / 6.7,
 					useNativeDriver: true,
 				}),
 			]).start();
@@ -46,7 +47,7 @@ export default function SearchScreen() {
 			keyboardDidShowListener.remove();
 			keyboardDidHideListener.remove();
 		};
-	}, [translateY]);
+	}, []);
   
 	return (
 		<>
@@ -61,8 +62,21 @@ export default function SearchScreen() {
 							source={require('../../../assets/search/logo42.png')}
 							style={[styles.logo, { opacity: opacity }]}
 						/>
-						<Input/>
-						{<Text></Text>}
+						<View style={{
+							alignItems: 'center',
+							width: '100%',
+						}}>
+							<Input/>
+							<View style={{
+								position: "absolute",
+								bottom: -screenWidth / 7.2,
+								alignItems: 'center',
+								justifyContent: 'center',
+								width: '100%',
+							}}>
+								<Error/>
+							</View>
+						</View>
 					</Animated.View>
 				</SafeAreaView>
 			</ImageBackground>
@@ -88,8 +102,8 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	logo: {
-		height: 125,
-		width: 125,
+		height: screenWidth / 2.88,
+		width: screenWidth / 2.88,
 		marginBottom: spacing,
 	},
 });

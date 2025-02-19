@@ -19,7 +19,7 @@ export function SwiftyCompanion() {
 		NavigationBar.setBackgroundColorAsync('transparent');
 		NavigationBar.setBehaviorAsync('overlay-swipe');
 		if (!getToken())
-			setErrorApi("Erreur lors de la connexion à l'API 42")
+			setErrorApi("Erreur lors de la connexion à l'API 42. Essayez de redémarrer l'application.")
 	}, []);
 
 	return (

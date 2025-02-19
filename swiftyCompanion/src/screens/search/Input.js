@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, Dimensions } from 'react-native';
 import axios from "axios";
 
 import { API_42 } from '../../utils/Constants';
+
+const screenWidth = Dimensions.get('window').width;
 
 export default function Input() {
     const [searchLogin, setSearchLogin] = useState('');
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         color: "#fff",
         width: '80%',
-        height: 50,
-        fontSize: 20,
+        height: screenWidth / 7.2,
+        fontSize: screenWidth / 18,
     },
 })
