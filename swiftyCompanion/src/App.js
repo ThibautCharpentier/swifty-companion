@@ -12,7 +12,7 @@ import { getToken } from './utils/Token';
 const Stack = createStackNavigator();
 
 export function SwiftyCompanion() {
-	const { errorApi, setErrorApi } = useErrorApi()
+	const { setErrorApi } = useErrorApi()
 
 	useEffect(() => {
 		NavigationBar.setVisibilityAsync('hidden');

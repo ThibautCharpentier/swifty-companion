@@ -5,7 +5,7 @@ import { useErrorApi } from '../../context/ErrorApi';
 
 const screenWidth = Dimensions.get('window').width;
 
-export default function Input() {
+export default function Error() {
     const { errorApi } = useErrorApi()
 
     return (
