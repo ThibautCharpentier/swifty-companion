@@ -6,7 +6,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import SearchScreen from './screens/search/SearchScreen';
+import DisplayScreen from './screens/display/DisplayScreen';
 import { ErrorApiProvider, useErrorApi } from './context/ErrorApi';
+import { CurrentUserProvider } from './context/CurrentUser';
 import { getToken } from './utils/Token';
 
 const Stack = createStackNavigator();
@@ -19,7 +21,7 @@ export function SwiftyCompanion() {
 		NavigationBar.setBackgroundColorAsync('transparent');
 		NavigationBar.setBehaviorAsync('overlay-swipe');
 		if (!getToken())
-			setErrorApi("Erreur lors de la connexion à l'API 42. Essayez de redémarrer l'application.")
+			setErrorApi("Error connecting to API 42. Try restarting the application.")
 	}, []);
 
 	return (
@@ -34,6 +36,11 @@ export function SwiftyCompanion() {
 						component={SearchScreen}
 						options={{ headerShown: false }}
 					/>
+					<Stack.Screen
+						name="DisplayScreen"
+						component={DisplayScreen}
+						options={{ headerShown: false }}
+					/>
                 </Stack.Navigator>
             </NavigationContainer>
 		</>
@@ -44,7 +51,9 @@ export default function App() {
   
 	return (
 		<ErrorApiProvider>
-			<SwiftyCompanion/>
+			<CurrentUserProvider>
+				<SwiftyCompanion/>
+			</CurrentUserProvider>
 		</ErrorApiProvider>
 	);
 }

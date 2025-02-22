@@ -1,16 +1,20 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, TextInput, Dimensions, TouchableOpacity, FlatList, Text, View, Image, Keyboard } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import { debounce } from "lodash"
 
 import { API_42 } from '../../utils/Constants';
 import { getToken } from '../../utils/Token';
 import { useErrorApi } from '../../context/ErrorApi';
+import { useCurrentUser } from '../../context/CurrentUser';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
 export default function Input() {
+    const navigation = useNavigation();
+    const { setCurrentUser } = useCurrentUser()
     const { setErrorApi } = useErrorApi()
     const [searchLogin, setSearchLogin] = useState('');
     const [logins, setLogins] = useState([])
@@ -32,7 +36,7 @@ export default function Input() {
                 )
                 if (tab_logins.data.length < 1) {
                     setLogins([])
-                    setErrorApi("Aucun utilisateur ne correspond à votre recherche")
+                    setErrorApi("No user match your search. Type something else.")
                 }
                 else {
                     let tab_tmp = []
@@ -46,7 +50,7 @@ export default function Input() {
             }
 			catch (e) {
                 console.log(e)
-                setErrorApi("Erreur lors de la connexion à l'API 42. Essayez de redémarrer l'application.")
+                setErrorApi("Error connecting to API 42. Try restarting the application.")
             }
 		}
 	}
@@ -59,29 +63,44 @@ export default function Input() {
     }
 
     const handleSearchLoginSubmit = () => {
-        setSearchLogin("")
-        setLogins([])
         setVisibleLogins(false)
+        if (logins.length < 1) {
+            setSearchLogin("")
+            setErrorApi("No user match your search. Type something else.")
+        }
+        else {
+            setErrorApi("")
+            setSearchLogin(logins[0].login)
+            setCurrentUser(logins[0])
+            setLogins([])
+            navigation.navigate('DisplayScreen')
+        }
     }
 
-    const handleSearchLoginSelection = () => {
+    const handleSearchLoginSelection = (selectedUser) => {
+        setVisibleLogins(false)
         Keyboard.dismiss()
         setErrorApi("")
-        setSearchLogin("")
+        setSearchLogin(selectedUser.login)
+        setCurrentUser(selectedUser)
         setLogins([])
-        setVisibleLogins(false)
+        navigation.navigate('DisplayScreen')
     }
 
     return (
         <>
             <TextInput
                 style={styles.searchLogin}
-                placeholder="Entrez un login"
+                placeholder="Search a login"
                 placeholderTextColor="#aaa"
                 value={searchLogin}
                 onChangeText={handleSearchLoginChange}
-                onFocus={() => setVisibleLogins(true)}
+                onFocus={() => {
+                    setVisibleLogins(true)
+                    dynamicSearchLogin(searchLogin)
+                }}
                 onSubmitEditing={handleSearchLoginSubmit}
+                autoCapitalize='none'
             />
             {visibleLogins && logins.length > 0 && (
                 <View style={styles.suggestedLoginsContainer}>
