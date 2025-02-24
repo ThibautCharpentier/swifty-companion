@@ -125,14 +125,15 @@ export default function Input() {
                                             }}
                                         />
                                         <View style={{
-                                            alignItems: 'center',
+                                            alignItems: 'start',
                                             justifyContent: 'center',
+                                            width: "80%",
+                                            paddingLeft: 15,
                                         }}>
                                             <Text
                                                 style={{
                                                     fontWeight: 'bold',
                                                     fontSize: screenWidth / 22,
-                                                    paddingHorizontal: 15,
                                                 }}
                                             >
                                                 {item.login}
@@ -179,5 +180,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 10,
         paddingHorizontal: 15,
+        width: "100%",
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 })
