@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, ImageBackground, Dimensions, ActivityIndicator } from 'react-native';
+import { SafeAreaView, StyleSheet, Dimensions, ActivityIndicator, ImageBackground, View } from 'react-native';
 import axios from "axios";
 
 import { useCurrentUser } from '../../context/CurrentUser';
@@ -53,11 +53,22 @@ export default function DisplayScreen() {
     return (
         <>
             <SafeAreaView style={styles.container}>
-                <BackButton/>
                 {!fetch ? (
                     <ActivityIndicator size="large" color="#fff" style={styles.loader} />
                 ) : (
-                    <Details dataUser={dataUser} />
+                        <ImageBackground
+                            source={dataUser?.coalitions?.[0]?.cover_url ?
+                                { uri: dataUser.coalitions[0].cover_url }
+                                :
+                                require('../../../assets/search/backgroundSearchScreen.png')
+                            }
+                            resizeMode="cover"
+                        >
+                            <View style={styles.backgroundImage}>
+                                <BackButton/>
+                                <Details dataUser={dataUser} />
+                            </View>
+                        </ImageBackground>
                 )}
             </SafeAreaView>
         </>
@@ -75,4 +86,9 @@ const styles = StyleSheet.create({
         top: "50%",
         transform: [{ scale: 2 }],
     },
+    backgroundImage: {
+        backgroundColor: "#0007",
+        width: "100%",
+        paddingBottom: 10
+    }
 });
