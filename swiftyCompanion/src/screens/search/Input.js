@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from 'react';
-import { StyleSheet, TextInput, Dimensions, TouchableOpacity, FlatList, Text, View, Image, Keyboard } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
+import { StyleSheet, TextInput, Dimensions, TouchableOpacity, FlatList, Text, View, Image, Keyboard, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
-import { debounce } from "lodash"
+import { debounce, set } from "lodash"
 
 import { API_42 } from '../../utils/Constants';
 import { getToken } from '../../utils/Token';
@@ -19,11 +19,14 @@ export default function Input() {
     const [searchLogin, setSearchLogin] = useState('');
     const [logins, setLogins] = useState([])
 	const [visibleLogins, setVisibleLogins] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const hasSubmit = useRef(false)
 
     const dynamicSearchLogin = async (text) => {
 		if (text.length < 3)
 			setLogins([])
 		else {
+            setLoading(true)
             try {
                 const token = await getToken()
                 if (!token)
@@ -34,6 +37,8 @@ export default function Input() {
                         },
                     }
                 )
+                if (hasSubmit.current)
+                    return
                 if (tab_logins.data.length < 1) {
                     setLogins([])
                     setErrorApi("No user match your search. Type something else.")
@@ -50,12 +55,48 @@ export default function Input() {
             }
 			catch (e) {
                 console.log(e)
+                setLogins([])
                 setErrorApi("Error connecting to API 42. Try restarting the application.")
             }
+            setLoading(false)
 		}
 	}
 
+    const submitLogin = async (text) => {
+        try {
+            const token = await getToken()
+            if (!token)
+                throw new Error("[Error: No valid token]")
+            const login = await axios.get(`${API_42}/users?filter[login]=${text}`, {
+                    headers: {
+                         Authorization: `Bearer ${token}`
+                    },
+                }
+            )
+            if (login.data.length < 1) {
+                setSearchLogin("")
+                setLogins([])
+                setErrorApi("No user match your search. Type something else.")
+            }
+            else {
+                setErrorApi("")
+                setSearchLogin(login.data[0].login)
+                setCurrentUser(login.data[0])
+                setLogins([])
+                navigation.navigate('DisplayScreen')
+            }
+        }
+        catch (e) {
+            console.log(e)
+            setSearchLogin("")
+            setLogins([])
+            setErrorApi("Error connecting to API 42. Try restarting the application.")
+        }
+        setLoading(false)
+    }
+
     const debouncedSearchLogin = useCallback(debounce(dynamicSearchLogin, 500), [])
+    const debouncedSubmit = useCallback(debounce(submitLogin, 500), [])
 
     const handleSearchLoginChange = (text) => {
         setSearchLogin(text)
@@ -63,18 +104,10 @@ export default function Input() {
     }
 
     const handleSearchLoginSubmit = () => {
+        hasSubmit.current = true
         setVisibleLogins(false)
-        if (logins.length < 1) {
-            setSearchLogin("")
-            setErrorApi("No user match your search. Type something else.")
-        }
-        else {
-            setErrorApi("")
-            setSearchLogin(logins[0].login)
-            setCurrentUser(logins[0])
-            setLogins([])
-            navigation.navigate('DisplayScreen')
-        }
+        setLoading(true)
+        debouncedSubmit(searchLogin)
     }
 
     const handleSearchLoginSelection = (selectedUser) => {
@@ -89,19 +122,23 @@ export default function Input() {
 
     return (
         <>
-            <TextInput
-                style={styles.searchLogin}
-                placeholder="Search a login"
-                placeholderTextColor="#aaa"
-                value={searchLogin}
-                onChangeText={handleSearchLoginChange}
-                onFocus={() => {
-                    setVisibleLogins(true)
-                    dynamicSearchLogin(searchLogin)
-                }}
-                onSubmitEditing={handleSearchLoginSubmit}
-                autoCapitalize='none'
-            />
+            <View style={styles.containerLogin}>
+                <TextInput
+                    style={styles.searchLogin}
+                    placeholder="Search a login"
+                    placeholderTextColor="#aaa"
+                    value={searchLogin}
+                    onChangeText={handleSearchLoginChange}
+                    onFocus={() => {
+                        hasSubmit.current = false
+                        setVisibleLogins(true)
+                        dynamicSearchLogin(searchLogin)
+                    }}
+                    onSubmitEditing={handleSearchLoginSubmit}
+                    autoCapitalize='none'
+                />
+                <ActivityIndicator size="small" color="#aaa" style={[styles.loader, { opacity: loading ? 1 : 0 }]} />
+            </View>
             {visibleLogins && logins.length > 0 && (
                 <View style={styles.suggestedLoginsContainer}>
                     <FlatList
@@ -152,15 +189,25 @@ export default function Input() {
 }
 
 const styles = StyleSheet.create({
-    searchLogin: {
+    containerLogin: {
         backgroundColor: "#0005",
         borderRadius: 5,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        color: "#fff",
         width: '80%',
         height: screenWidth / 7.2,
+        justifyContent: "center",
+        flexDirection: "row",
+    },
+    searchLogin: {
+        paddingVertical: 10,
+        paddingLeft: 15,
+        color: "#fff",
+        width: '100%',
         fontSize: screenWidth / 18,
+        flex: 8
+    },
+    loader: {
+        flex: 2,
+        transform: [{ scale: 1.3 }],
     },
     suggestedLoginsContainer: {
         position: "relative",
