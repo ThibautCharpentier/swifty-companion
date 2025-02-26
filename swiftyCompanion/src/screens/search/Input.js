@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { StyleSheet, TextInput, Dimensions, TouchableOpacity, FlatList, Text, View, Image, Keyboard, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
-import { debounce, set } from "lodash"
+import { debounce } from "lodash"
 
 import { API_42 } from '../../utils/Constants';
 import { getToken } from '../../utils/Token';

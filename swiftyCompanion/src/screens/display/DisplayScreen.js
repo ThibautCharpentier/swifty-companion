@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Dimensions, ActivityIndicator, ImageBackground, View } from 'react-native';
+import { SafeAreaView, StyleSheet, ActivityIndicator, ImageBackground, View, Dimensions } from 'react-native';
 import axios from "axios";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import { useCurrentUser } from '../../context/CurrentUser';
 import BackButton from './BackButton';
 import Details from './Details'
+import Projects from './Projects'
+import Skills from './Skills'
 import { useErrorApi } from '../../context/ErrorApi';
 import { API_42 } from '../../utils/Constants';
 import { getToken } from '../../utils/Token';
 
-const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+const Tab = createMaterialTopTabNavigator();
 
 export default function DisplayScreen() {
     const { currentUser } = useCurrentUser()
@@ -56,6 +59,7 @@ export default function DisplayScreen() {
                 {!fetch ? (
                     <ActivityIndicator size="large" color="#fff" style={styles.loader} />
                 ) : (
+                    <>
                         <ImageBackground
                             source={dataUser?.coalitions?.[0]?.cover_url ?
                                 { uri: dataUser.coalitions[0].cover_url }
@@ -69,6 +73,27 @@ export default function DisplayScreen() {
                                 <Details dataUser={dataUser} />
                             </View>
                         </ImageBackground>
+                        <View style={styles.tabContainer}>
+                            <Tab.Navigator
+                                tabBarPosition="top"
+                                initialRouteName="Projects"  
+                                screenOptions={{
+                                    tabBarIndicatorStyle: { backgroundColor: dataUser?.coalitions[0]?.color || "#000", height: 3 },
+                                    tabBarLabelStyle: { fontWeight: 'bold', fontSize: screenWidth / 25 },
+                                    tabBarPressColor: 'transparent',
+                                }}                              
+                            >
+                                <Tab.Screen
+                                    name="Projects"
+                                    children={() => <Projects/>}
+                                />
+                                <Tab.Screen
+                                    name="Skills"
+                                    children={() => <Skills/>}
+                                />
+                            </Tab.Navigator>
+                        </View>
+                    </>
                 )}
             </SafeAreaView>
         </>
@@ -90,5 +115,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#0007",
         width: "100%",
         paddingBottom: 10
+    },
+    tabContainer: {
+        backgroundColor: "#ddd",
+        flex: 1,
+        width: "100%",
     }
 });
