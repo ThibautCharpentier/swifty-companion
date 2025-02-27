@@ -50,7 +50,11 @@ export default function DisplayScreen() {
             }
         }
 
-		getDataUser()
+		const timer = setTimeout(() => {
+            getDataUser()
+        }, 1000)
+    
+        return () => clearTimeout(timer)
 	}, []);
   
     return (
@@ -78,14 +82,16 @@ export default function DisplayScreen() {
                                 tabBarPosition="top"
                                 initialRouteName="Projects"  
                                 screenOptions={{
-                                    tabBarIndicatorStyle: { backgroundColor: dataUser?.coalitions[0]?.color || "#000", height: 3 },
+                                    tabBarIndicatorStyle: { backgroundColor: dataUser?.coalitions?.[0]?.color || "#000", height: 3 },
                                     tabBarLabelStyle: { fontWeight: 'bold', fontSize: screenWidth / 25 },
                                     tabBarPressColor: 'transparent',
                                 }}                              
                             >
                                 <Tab.Screen
                                     name="Projects"
-                                    children={() => <Projects/>}
+                                    children={() => <Projects
+                                        dataUser={dataUser}
+                                    />}
                                 />
                                 <Tab.Screen
                                     name="Skills"

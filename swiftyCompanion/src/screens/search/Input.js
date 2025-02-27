@@ -46,7 +46,7 @@ export default function Input() {
                 else {
                     let tab_tmp = []
                     for (let i = 0; i < tab_logins.data.length; i++) {
-                        if (tab_logins?.data[i]?.login && tab_logins?.data[i]?.image?.link)
+                        if (tab_logins?.data?.[i]?.login && tab_logins?.data?.[i]?.image?.link)
                             tab_tmp.push(tab_logins.data[i])
                     }
                     setLogins(tab_tmp)
@@ -96,7 +96,7 @@ export default function Input() {
     }
 
     const debouncedSearchLogin = useCallback(debounce(dynamicSearchLogin, 500), [])
-    const debouncedSubmit = useCallback(debounce(submitLogin, 500), [])
+    const debouncedSubmit = useCallback(debounce(submitLogin, 1000), [])
 
     const handleSearchLoginChange = (text) => {
         setSearchLogin(text)

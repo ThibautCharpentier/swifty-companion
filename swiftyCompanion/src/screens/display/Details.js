@@ -1,15 +1,16 @@
-import React, { } from 'react';
+import React from 'react';
 import { View, StyleSheet, Dimensions, Image, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useCurrentUser } from '../../context/CurrentUser';
-import { getDecimal } from '../../utils/Utils';
+import { getDecimal, findCursus } from '../../utils/Utils';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 export default function Details({ dataUser }) {
     const { currentUser } = useCurrentUser()
+    const cursus = findCursus(dataUser.cursus_users)
   
     return (
         <View style={styles.container}>
@@ -37,51 +38,36 @@ export default function Details({ dataUser }) {
                         <Ionicons
                             name="person-outline"
                             size={screenWidth / 30}
-                            color={dataUser?.coalitions[0]?.color || "#fff"}
+                            color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
                         <Text style={[styles.informationText, {paddingLeft: 5}]}>
-                            {currentUser?.displayname ?
-                                currentUser.displayname
-                                :
-                                ""
-                            }
+                            {currentUser?.displayname || ""}
                         </Text>
                     </View>
                     <View style={styles.informationContainer}>
                         <Ionicons
                             name="mail-outline"
                             size={screenWidth / 30}
-                            color={dataUser?.coalitions[0]?.color || "#fff"}
+                            color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
                         <Text style={[styles.informationText, {paddingLeft: 5}]}>
-                            {currentUser?.email ?
-                                currentUser.email
-                                :
-                                ""
-                            }
+                            {currentUser?.email || ""}
                         </Text>
                     </View>
                     <View style={styles.informationContainer}>
                         <Ionicons
                             name="location-outline"
                             size={screenWidth / 30}
-                            color={dataUser?.coalitions[0]?.color || "#fff"}
+                            color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
                         <Text style={[styles.informationText, {paddingLeft: 5}]}>
-                            {dataUser?.campus[dataUser.campus.length - 1]?.name ?
-                                dataUser.campus[dataUser.campus.length - 1].name
-                                :
-                                ""
-                            }
+                            {dataUser?.campus?.[dataUser.campus.length - 1]?.name || ""}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.levelContainer}>
                     <Text style={{color: "#fff", fontSize: screenWidth / 14, fontWeight: "bold"}}>
-                        {dataUser?.cursus_users[dataUser.cursus_users.length - 1]?.level ?
-                            Math.floor(dataUser.cursus_users[dataUser.cursus_users.length - 1].level)
-                            : "0"
-                        }
+                        {Math.floor(cursus?.level || 0)}
                     </Text>
                     <View
                         style={{
@@ -99,8 +85,8 @@ export default function Details({ dataUser }) {
                         >
                             <View style={{width: "33%", justifyContent: "flex-end"}}>
                                 <Text style={{color: "#fff", fontSize: screenWidth / 30, fontWeight: "bold", textAlign: "left",}}>
-                                    {dataUser?.cursus_users[dataUser.cursus_users.length - 1]?.level ?
-                                        getDecimal(dataUser.cursus_users[dataUser.cursus_users.length - 1].level)
+                                    {cursus?.level ?
+                                        getDecimal(cursus.level)
                                         :
                                         "00"
                                     }%
@@ -108,20 +94,12 @@ export default function Details({ dataUser }) {
                             </View>
                             <View style={{width: "34%", justifyContent: "flex-end"}}>
                                 <Text style={[styles.informationText, {textAlign: "center",}]}>
-                                    {currentUser?.wallet ?
-                                        currentUser.wallet
-                                        :
-                                        "0"
-                                    }₳
+                                    {currentUser?.wallet || "0"}₳
                                 </Text>
                             </View>
                             <View style={{width: "33%", justifyContent: "flex-end"}}>
                                 <Text style={[styles.informationText, {textAlign: "right",}]}>
-                                    ev.p {currentUser?.correction_point ?
-                                        currentUser.correction_point
-                                        :
-                                        "0"
-                                    }
+                                    ev.p {currentUser?.correction_point || "0"}
                                 </Text>
                             </View>
                         </View>
@@ -132,15 +110,12 @@ export default function Details({ dataUser }) {
                             }}
                         >
                             <View style={[styles.progressBar, {
-                                borderColor: dataUser?.coalitions[0]?.color || "#fff",
+                                borderColor: dataUser?.coalitions?.[0]?.color || "#fff",
                             }]}>
                                 <View style={[styles.fillerBar, {
-                                    width: dataUser?.cursus_users[dataUser.cursus_users.length - 1]?.level ?
-                                        `${getDecimal(dataUser.cursus_users[dataUser.cursus_users.length - 1].level)}%`
-                                        :
-                                        "0%",
-                                    backgroundColor: dataUser?.coalitions[0]?.color || "#fff",
-                                    borderColor: dataUser?.coalitions[0]?.color || "#fff",
+                                    width: `${getDecimal(cursus?.level || 0)}%`,
+                                    backgroundColor: dataUser?.coalitions?.[0]?.color || "#fff",
+                                    borderColor: dataUser?.coalitions?.[0]?.color || "#fff",
                                 }]}/>
                             </View>
                         </View>
