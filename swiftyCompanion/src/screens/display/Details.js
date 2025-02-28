@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, StyleSheet, Dimensions, Image, Text } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, StyleSheet, Dimensions, Image, Text, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useCurrentUser } from '../../context/CurrentUser';
@@ -11,6 +11,20 @@ const screenWidth = Dimensions.get('window').width;
 export default function Details({ dataUser }) {
     const { currentUser } = useCurrentUser()
     const cursus = findCursus(dataUser.cursus_users)
+    const progress = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.timing(progress, {
+            toValue: getDecimal(cursus?.level || 0),
+            duration: screenWidth * 2.78,
+            useNativeDriver: false,
+        }).start();
+    }, []);
+
+    const progressInterpolate = progress.interpolate({
+        inputRange: [0, 100],
+        outputRange: ["0%", "100%"],
+    });
   
     return (
         <View style={styles.container}>
@@ -112,8 +126,8 @@ export default function Details({ dataUser }) {
                             <View style={[styles.progressBar, {
                                 borderColor: dataUser?.coalitions?.[0]?.color || "#fff",
                             }]}>
-                                <View style={[styles.fillerBar, {
-                                    width: `${getDecimal(cursus?.level || 0)}%`,
+                                <Animated.View style={[styles.fillerBar, {
+                                    width: progressInterpolate,
                                     backgroundColor: dataUser?.coalitions?.[0]?.color || "#fff",
                                     borderColor: dataUser?.coalitions?.[0]?.color || "#fff",
                                 }]}/>

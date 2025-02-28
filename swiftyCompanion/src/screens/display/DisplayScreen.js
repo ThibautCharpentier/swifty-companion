@@ -95,7 +95,9 @@ export default function DisplayScreen() {
                                 />
                                 <Tab.Screen
                                     name="Skills"
-                                    children={() => <Skills/>}
+                                    children={() => <Skills
+                                        dataUser={dataUser}
+                                    />}
                                 />
                             </Tab.Navigator>
                         </View>

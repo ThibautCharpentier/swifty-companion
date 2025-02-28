@@ -7,33 +7,35 @@ export default function Projects({ dataUser }) {
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={dataUser.projects_users}
-                keyExtractor={(item, index) => `${item.id}-${index}`}
-                style={styles.listProjects}
-                renderItem={({ item }) => (
-                    <>
-                        {item?.cursus_ids?.[0] == 21 && item?.["validated?"] != undefined && item?.project?.name && item?.final_mark &&
-                            <View style={styles.project}>
-                                <View style={styles.nameProject}>
-                                    <Text style={styles.text}>
-                                        {item.project.name}
-                                    </Text>
+            { dataUser?.projects_users &&
+                <FlatList
+                    data={dataUser.projects_users}
+                    keyExtractor={(item, index) => `${item.id}-${index}`}
+                    style={styles.listProjects}
+                    renderItem={({ item }) => (
+                        <>
+                            {item?.cursus_ids?.[0] == 21 && item?.["validated?"] != undefined && item?.project?.name && item?.final_mark != undefined &&
+                                <View style={styles.project}>
+                                    <View style={styles.nameProject}>
+                                        <Text style={styles.text}>
+                                            {item.project.name}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.markProject}>
+                                        <Text style={[styles.text, {
+                                            textAlign: "right",
+                                            fontWeight: "bold",
+                                            color: item["validated?"] ? "#0a0" : "#a00"
+                                        }]}>
+                                            {item.final_mark}
+                                        </Text>
+                                    </View>
                                 </View>
-                                <View style={styles.markProject}>
-                                    <Text style={[styles.text, {
-                                        textAlign: "right",
-                                        fontWeight: "bold",
-                                        color: item["validated?"] ? "#0a0" : "#a00"
-                                    }]}>
-                                        {item.final_mark}
-                                    </Text>
-                                </View>
-                            </View>
-                        }
-                    </>
-                )}
-            />
+                            }
+                        </>
+                    )}
+                />
+            }
         </View>
     );
 }
