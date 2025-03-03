@@ -7,6 +7,9 @@ import Error from './Error';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 const spacing = screenWidth / 12
+const animationTime = screenHeight / 6.7
+const spaceBelowInput = screenWidth / 7.2
+const logoSize = screenWidth / 2.88
 
 export default function SearchScreen() {
 	const translateY = useRef(new Animated.Value(0)).current;
@@ -17,12 +20,12 @@ export default function SearchScreen() {
 			Animated.parallel([
 				Animated.timing(translateY, {
 					toValue: -screenHeight / 2 - spacing,
-					duration: screenHeight / 6.7,
+					duration: animationTime,
 					useNativeDriver: true,
 				}),
 				Animated.timing(opacity, {
 					toValue: 0,
-					duration: screenHeight / 6.7,
+					duration: animationTime,
 					useNativeDriver: true,
 				}),
 			]).start();
@@ -32,12 +35,12 @@ export default function SearchScreen() {
 			Animated.parallel([
 				Animated.timing(translateY, {
 					toValue: 0,
-					duration: screenHeight / 6.7,
+					duration: animationTime,
 					useNativeDriver: true,
 				}),
 				Animated.timing(opacity, {
 					toValue: 1,
-					duration: screenHeight / 6.7,
+					duration: animationTime,
 					useNativeDriver: true,
 				}),
 			]).start();
@@ -69,7 +72,7 @@ export default function SearchScreen() {
 							<Input/>
 							<View style={{
 								position: "absolute",
-								bottom: -screenWidth / 7.2,
+								bottom: -spaceBelowInput,
 								alignItems: 'center',
 								justifyContent: 'center',
 								width: '100%',
@@ -102,8 +105,8 @@ const styles = StyleSheet.create({
 		width: '100%',
 	},
 	logo: {
-		height: screenWidth / 2.88,
-		width: screenWidth / 2.88,
+		height: logoSize,
+		width: logoSize,
 		marginBottom: spacing,
 	},
 });

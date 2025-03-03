@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Dimensions, Text, FlatList } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
+const fontSizeText = screenWidth / 20
 
 export default function Projects({ dataUser }) {
 
@@ -60,6 +61,6 @@ const styles = StyleSheet.create({
         justifyContent: "center"
     },
     text: {
-        fontSize: screenWidth / 20
+        fontSize: fontSizeText
     }
 });

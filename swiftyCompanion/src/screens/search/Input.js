@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { StyleSheet, TextInput, Dimensions, TouchableOpacity, FlatList, Text, View, Image, Keyboard, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
@@ -11,6 +11,12 @@ import { useCurrentUser } from '../../context/CurrentUser';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
+const spacing = screenWidth / 12
+const maxHeightFlatlist = screenHeight / 2.6
+const sizeInput = screenWidth / 7.2
+const sizeImagesProfil = screenWidth / 7.2
+const fontSizeLogins = screenWidth / 22
+const fontSizeSearch = screenWidth / 18
 
 export default function Input() {
     const navigation = useNavigation();
@@ -20,7 +26,19 @@ export default function Input() {
     const [logins, setLogins] = useState([])
 	const [visibleLogins, setVisibleLogins] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [screenHeightWithKeyboard, setScreenHeightWithKeyboard] = useState(maxHeightFlatlist)
     const hasSubmit = useRef(false)
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", (event) => {
+            if (maxHeightFlatlist > screenHeight - event.endCoordinates.height - sizeInput - spacing)
+                setScreenHeightWithKeyboard(screenHeight - event.endCoordinates.height - sizeInput - spacing)
+        });
+    
+        return () => {
+			keyboardDidShowListener.remove();
+		};
+    }, []);
 
     const dynamicSearchLogin = async (text) => {
 		if (text.length < 3)
@@ -100,6 +118,7 @@ export default function Input() {
 
     const handleSearchLoginChange = (text) => {
         setSearchLogin(text)
+        setErrorApi("")
         debouncedSearchLogin(text)
     }
 
@@ -140,11 +159,11 @@ export default function Input() {
                 <ActivityIndicator size="small" color="#aaa" style={[styles.loader, { opacity: loading ? 1 : 0 }]} />
             </View>
             {visibleLogins && logins.length > 0 && (
-                <View style={styles.suggestedLoginsContainer}>
+                <View style={[styles.suggestedLoginsContainer, {maxHeight: screenHeightWithKeyboard,}]}>
                     <FlatList
                         data={logins}
                         keyExtractor={(item, index) => `${item.id}-${index}`}
-                        style={styles.suggestedLogins}
+                        style={[styles.suggestedLogins, {maxHeight: screenHeightWithKeyboard,}]}
                         keyboardShouldPersistTaps="handled"
                         renderItem={({ item }) => (
                             <>
@@ -156,8 +175,8 @@ export default function Input() {
                                         <Image
                                             source={{ uri: `${item.image.link}` }}
                                             style={{
-                                                width: screenWidth / 7.2,
-                                                height: screenWidth / 7.2,
+                                                width: sizeImagesProfil,
+                                                height: sizeImagesProfil,
                                                 borderRadius: 100,
                                             }}
                                         />
@@ -170,7 +189,7 @@ export default function Input() {
                                             <Text
                                                 style={{
                                                     fontWeight: 'bold',
-                                                    fontSize: screenWidth / 22,
+                                                    fontSize: fontSizeLogins,
                                                 }}
                                             >
                                                 {item.login}
@@ -193,7 +212,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#0005",
         borderRadius: 5,
         width: '80%',
-        height: screenWidth / 7.2,
+        height: sizeInput,
         justifyContent: "center",
         flexDirection: "row",
     },
@@ -202,7 +221,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         color: "#fff",
         width: '100%',
-        fontSize: screenWidth / 18,
+        fontSize: fontSizeSearch,
         flex: 8
     },
     loader: {
@@ -214,14 +233,12 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff',
         borderRadius: 5,
 		width: '80%',
-		maxHeight: screenHeight / 3,
 	},
     suggestedLogins: {
         position: "absolute",
 		backgroundColor: '#fff',
         borderRadius: 5,
 		width: '100%',
-		maxHeight: screenHeight / 3,
 	},
     suggestedLogin: {
         flexDirection: 'row',

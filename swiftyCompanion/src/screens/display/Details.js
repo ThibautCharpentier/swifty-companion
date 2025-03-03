@@ -7,6 +7,14 @@ import { getDecimal, findCursus } from '../../utils/Utils';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+const animationTime = screenWidth * 2.78
+const sizeImageProfil = screenWidth / 3
+const sizeIonicons = screenWidth / 30
+const sizePercentage = screenWidth / 30
+const fontSizeLogin = screenWidth / 14
+const fontSizeLevel = screenWidth / 14
+const spaceAboveContainer = screenHeight / 25
+const fontSizeText = screenWidth / 33
 
 export default function Details({ dataUser }) {
     const { currentUser } = useCurrentUser()
@@ -16,7 +24,7 @@ export default function Details({ dataUser }) {
     useEffect(() => {
         Animated.timing(progress, {
             toValue: getDecimal(cursus?.level || 0),
-            duration: screenWidth * 2.78,
+            duration: animationTime,
             useNativeDriver: false,
         }).start();
     }, []);
@@ -29,17 +37,17 @@ export default function Details({ dataUser }) {
     return (
         <View style={styles.container}>
             <Image
-                source={{ uri: `${currentUser.image.link}` }}
+                source={{ uri: `${currentUser?.image?.link}` }}
                 style={{
-                    width: screenWidth / 3,
-                    height: screenWidth / 3,
+                    width: sizeImageProfil,
+                    height: sizeImageProfil,
                     borderRadius: 100,
                     marginRight: 5,
                 }}
             />
             <View style={styles.details}>
                 <Text style={styles.login}>
-                    {currentUser.login}
+                    {currentUser?.login || ""}
                 </Text>
                 <View
                     style={{
@@ -51,7 +59,7 @@ export default function Details({ dataUser }) {
                     <View style={styles.informationContainer}>
                         <Ionicons
                             name="person-outline"
-                            size={screenWidth / 30}
+                            size={sizeIonicons}
                             color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
                         <Text style={[styles.informationText, {paddingLeft: 5}]}>
@@ -61,7 +69,7 @@ export default function Details({ dataUser }) {
                     <View style={styles.informationContainer}>
                         <Ionicons
                             name="mail-outline"
-                            size={screenWidth / 30}
+                            size={sizeIonicons}
                             color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
                         <Text style={[styles.informationText, {paddingLeft: 5}]}>
@@ -71,7 +79,7 @@ export default function Details({ dataUser }) {
                     <View style={styles.informationContainer}>
                         <Ionicons
                             name="location-outline"
-                            size={screenWidth / 30}
+                            size={sizeIonicons}
                             color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
                         <Text style={[styles.informationText, {paddingLeft: 5}]}>
@@ -80,7 +88,7 @@ export default function Details({ dataUser }) {
                     </View>
                 </View>
                 <View style={styles.levelContainer}>
-                    <Text style={{color: "#fff", fontSize: screenWidth / 14, fontWeight: "bold"}}>
+                    <Text style={{color: "#fff", fontSize: fontSizeLevel, fontWeight: "bold"}}>
                         {Math.floor(cursus?.level || 0)}
                     </Text>
                     <View
@@ -98,7 +106,7 @@ export default function Details({ dataUser }) {
                             }}
                         >
                             <View style={{width: "33%", justifyContent: "flex-end"}}>
-                                <Text style={{color: "#fff", fontSize: screenWidth / 30, fontWeight: "bold", textAlign: "left",}}>
+                                <Text style={{color: "#fff", fontSize: sizePercentage, fontWeight: "bold", textAlign: "left",}}>
                                     {cursus?.level ?
                                         getDecimal(cursus.level)
                                         :
@@ -144,7 +152,7 @@ const styles = StyleSheet.create({
     container: {
         width: "100%",
         flexDirection: 'row',
-        marginTop: screenHeight / 25,
+        marginTop: spaceAboveContainer,
         paddingHorizontal: 10,
     },
     details: {
@@ -156,7 +164,7 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontWeight: "bold",
         textAlign: "center",
-        fontSize: screenWidth / 14,
+        fontSize: fontSizeLogin,
         paddingBottom: 1
     },
     informationContainer: {
@@ -172,7 +180,7 @@ const styles = StyleSheet.create({
     },
     informationText: {
         color: "#fff",
-        fontSize: screenWidth / 33,
+        fontSize: fontSizeText,
     },
     progressBar: {
         width: "100%",

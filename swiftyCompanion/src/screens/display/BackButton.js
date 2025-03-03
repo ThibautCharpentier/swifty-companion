@@ -5,6 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+const spaceAboveContainer = screenHeight / 17
+const sizeIonicon = screenWidth / 12
+const fontSizeBackText = screenWidth / 18
 
 export default function BackButton() {
     const navigation = useNavigation();
@@ -19,7 +22,7 @@ export default function BackButton() {
             >
                 <Ionicons
                     name="chevron-back-outline"
-					size={screenWidth / 12}
+					size={sizeIonicon}
 					color="#fff"
                 />
                 <Text style={styles.backText}>
@@ -33,7 +36,7 @@ export default function BackButton() {
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        marginTop: screenHeight / 17
+        marginTop: spaceAboveContainer
     },
     button: {
         flexDirection: "row",
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     backText: {
         color: "#fff",
         fontWeight: "bold",
-        fontSize: screenWidth / 18,
+        fontSize: fontSizeBackText,
         alignSelf: "center"
     }
 });

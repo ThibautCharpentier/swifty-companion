@@ -4,6 +4,8 @@ import { View, StyleSheet, Dimensions, Text, FlatList } from 'react-native';
 import { findCursus, getDecimal } from '../../utils/Utils';
 
 const screenWidth = Dimensions.get('window').width;
+const fontSizeText = screenWidth / 20
+const sizeProgressBar = screenWidth / 30
 
 export default function Skills({ dataUser }) {
 
@@ -37,7 +39,7 @@ export default function Skills({ dataUser }) {
                                         <View
                                             style={{
                                                 width: "80%",
-                                                height: screenWidth / 30,
+                                                height: sizeProgressBar,
                                                 alignSelf: "center",
                                             }}
                                         >
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
         paddingLeft: 5
     },
     text: {
-        fontSize: screenWidth / 20
+        fontSize: fontSizeText
     },
     progressBar: {
         width: "100%",

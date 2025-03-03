@@ -4,6 +4,7 @@ import { StyleSheet, Text, Dimensions} from 'react-native';
 import { useErrorApi } from '../../context/ErrorApi';
 
 const screenWidth = Dimensions.get('window').width;
+const fontSizeError = screenWidth / 24
 
 export default function Error() {
     const { errorApi } = useErrorApi()
@@ -22,7 +23,7 @@ export default function Error() {
 const styles = StyleSheet.create({
     error: {
         color: "#ff9090",
-        fontSize: screenWidth / 24,
+        fontSize: fontSizeError,
         fontStyle: "italic",
         fontWeight: "bold",
         textAlign: "center",

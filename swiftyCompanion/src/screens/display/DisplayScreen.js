@@ -13,6 +13,7 @@ import { API_42 } from '../../utils/Constants';
 import { getToken } from '../../utils/Token';
 
 const screenWidth = Dimensions.get('window').width;
+const fontSizeLabel = screenWidth / 25
 const Tab = createMaterialTopTabNavigator();
 
 export default function DisplayScreen() {
@@ -83,7 +84,7 @@ export default function DisplayScreen() {
                                 initialRouteName="Projects"  
                                 screenOptions={{
                                     tabBarIndicatorStyle: { backgroundColor: dataUser?.coalitions?.[0]?.color || "#000", height: 3 },
-                                    tabBarLabelStyle: { fontWeight: 'bold', fontSize: screenWidth / 25 },
+                                    tabBarLabelStyle: { fontWeight: 'bold', fontSize: fontSizeLabel },
                                     tabBarPressColor: 'transparent',
                                 }}                              
                             >
