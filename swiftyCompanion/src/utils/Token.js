@@ -7,6 +7,8 @@ import { API_42 } from './Constants';
 const setToken = async() => {
     try {
         const response = await axios.post(`${API_42}/oauth/token?grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`)
+        if (response.status != 200)
+            throw new Error("statusCode != 200")
         await Keychain.setGenericPassword('token', JSON.stringify({
             access_token: response.data.access_token,
             expires_in: Date.now() + response.data.expires_in * 1000
@@ -25,9 +27,11 @@ export async function getToken() {
         if (!token && !(token = await setToken()))
             return null
         let tokenData = JSON.parse(token.password);
-        if (tokenData.expires_in - Date.now() < 10000000)
+        if (tokenData.expires_in - Date.now() < 10000)
         {
             token = await setToken()
+            if (!token)
+                throw new Error("No valid token")
             return JSON.parse(token.password).access_token
         }
         return tokenData.access_token

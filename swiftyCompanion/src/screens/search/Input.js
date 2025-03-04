@@ -48,13 +48,15 @@ export default function Input() {
             try {
                 const token = await getToken()
                 if (!token)
-                    throw new Error("[Error: No valid token]")
+                    throw new Error("No valid token")
                 const tab_logins = await axios.get(`${API_42}/users?range[login]=${text},${text}zzz`, {
                         headers: {
                              Authorization: `Bearer ${token}`
                         },
                     }
                 )
+                if (tab_logins.status != 200)
+                    throw new Error("statusCode != 200")
                 if (hasSubmit.current)
                     return
                 if (tab_logins.data.length < 1) {
@@ -64,7 +66,7 @@ export default function Input() {
                 else {
                     let tab_tmp = []
                     for (let i = 0; i < tab_logins.data.length; i++) {
-                        if (tab_logins?.data?.[i]?.login && tab_logins?.data?.[i]?.image?.link)
+                        if (tab_logins.data[i]?.login && tab_logins.data[i]?.image?.link)
                             tab_tmp.push(tab_logins.data[i])
                     }
                     setLogins(tab_tmp)
@@ -84,13 +86,15 @@ export default function Input() {
         try {
             const token = await getToken()
             if (!token)
-                throw new Error("[Error: No valid token]")
+                throw new Error("No valid token")
             const login = await axios.get(`${API_42}/users?filter[login]=${text}`, {
                     headers: {
                          Authorization: `Bearer ${token}`
                     },
                 }
             )
+            if (login.status != 200)
+                throw new Error("statusCode != 200")
             if (login.data.length < 1) {
                 setSearchLogin("")
                 setLogins([])
