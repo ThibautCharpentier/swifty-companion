@@ -148,7 +148,7 @@ export default function Input() {
             <View style={styles.containerLogin}>
                 <TextInput
                     style={styles.searchLogin}
-                    placeholder="Search a login"
+                    placeholder="Search for a login"
                     placeholderTextColor="#aaa"
                     value={searchLogin}
                     onChangeText={handleSearchLoginChange}
