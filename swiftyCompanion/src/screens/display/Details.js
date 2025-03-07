@@ -46,7 +46,11 @@ export default function Details({ dataUser }) {
                 }}
             />
             <View style={styles.details}>
-                <Text style={styles.login}>
+                <Text 
+                    style={styles.login}
+                    numberOfLines={1}
+                    adjustsFontSizeToFit={true}
+                >
                     {currentUser?.login || ""}
                 </Text>
                 <View
@@ -62,7 +66,11 @@ export default function Details({ dataUser }) {
                             size={sizeIonicons}
                             color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
-                        <Text style={[styles.informationText, {paddingLeft: 5}]}>
+                        <Text 
+                            style={[styles.informationText, {paddingLeft: 5}]}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit={true}
+                        >
                             {currentUser?.displayname || ""}
                         </Text>
                     </View>
@@ -72,7 +80,11 @@ export default function Details({ dataUser }) {
                             size={sizeIonicons}
                             color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
-                        <Text style={[styles.informationText, {paddingLeft: 5}]}>
+                        <Text 
+                            style={[styles.informationText, {paddingLeft: 5}]}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit={true}
+                        >
                             {currentUser?.email || ""}
                         </Text>
                     </View>
@@ -82,7 +94,11 @@ export default function Details({ dataUser }) {
                             size={sizeIonicons}
                             color={dataUser?.coalitions?.[0]?.color || "#fff"}
                         />
-                        <Text style={[styles.informationText, {paddingLeft: 5}]}>
+                        <Text 
+                            style={[styles.informationText, {paddingLeft: 5}]}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit={true}
+                        >
                             {dataUser?.campus?.[dataUser.campus.length - 1]?.name || ""}
                         </Text>
                     </View>

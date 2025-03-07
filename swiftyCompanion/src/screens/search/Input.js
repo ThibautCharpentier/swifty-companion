@@ -195,6 +195,8 @@ export default function Input() {
                                                     fontWeight: 'bold',
                                                     fontSize: fontSizeLogins,
                                                 }}
+                                                numberOfLines={1}
+                                                adjustsFontSizeToFit={true}
                                             >
                                                 {item.login}
                                             </Text>
