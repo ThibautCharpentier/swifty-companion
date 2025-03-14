@@ -3,6 +3,8 @@ import { View, StyleSheet, TouchableOpacity, Dimensions, Text } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { revokeToken } from '../../utils/Token';
+
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 const spaceAboveContainer = screenHeight / 17
@@ -11,13 +13,16 @@ const fontSizeBackText = screenWidth / 18
 
 export default function BackButton() {
     const navigation = useNavigation();
+
+    const submitLogout = async () => {
+        revokeToken()
+        navigation.replace("LoginScreen")
+    }
   
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                onPress={() => {
-                    navigation.goBack()
-                }}
+                onPress={submitLogout}
                 style={styles.button}
             >
                 <Ionicons
@@ -26,7 +31,7 @@ export default function BackButton() {
 					color="#fff"
                 />
                 <Text style={styles.backText}>
-                    Back
+                    Logout
                 </Text>
             </TouchableOpacity>
         </View>

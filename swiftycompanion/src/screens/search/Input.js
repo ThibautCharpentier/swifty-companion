@@ -11,8 +11,9 @@ import { useCurrentUser } from '../../context/CurrentUser';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
-const spacing = screenWidth / 12
-const maxHeightFlatlist = screenHeight / 2.6
+const spaceAboveContainer = screenHeight / 17
+const spacing = screenWidth / 50
+const maxHeightFlatlist = screenHeight / 2.8
 const sizeInput = screenWidth / 7.2
 const sizeImagesProfil = screenWidth / 7.2
 const fontSizeLogins = screenWidth / 22
@@ -31,12 +32,17 @@ export default function Input() {
 
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", (event) => {
-            if (maxHeightFlatlist > screenHeight - event.endCoordinates.height - sizeInput - spacing)
-                setScreenHeightWithKeyboard(screenHeight - event.endCoordinates.height - sizeInput - spacing)
+            if (maxHeightFlatlist > screenHeight - event.endCoordinates.height - sizeInput - spacing - spaceAboveContainer)
+                setScreenHeightWithKeyboard(screenHeight - event.endCoordinates.height - sizeInput - spacing - spaceAboveContainer)
+        });
+
+        const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", (event) => {
+            setScreenHeightWithKeyboard(maxHeightFlatlist)
         });
     
         return () => {
 			keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
 		};
     }, []);
 

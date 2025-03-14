@@ -8,21 +8,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SearchScreen from './screens/search/SearchScreen';
 import DisplayScreen from './screens/display/DisplayScreen';
 import LoginScreen from './screens/login/LoginScreen';
-import { ErrorApiProvider, useErrorApi } from './context/ErrorApi';
+import { ErrorApiProvider } from './context/ErrorApi';
 import { CurrentUserProvider } from './context/CurrentUser';
-import { getToken } from './utils/Token';
 
 const Stack = createStackNavigator();
 
 export function SwiftyCompanion() {
-	const { setErrorApi } = useErrorApi()
 
 	useEffect(() => {
 		NavigationBar.setVisibilityAsync('hidden');
 		NavigationBar.setBackgroundColorAsync('transparent');
 		NavigationBar.setBehaviorAsync('overlay-swipe');
-		if (!getToken())
-			setErrorApi("Error connecting to API 42. Try restarting the application.")
 	}, []);
 
 	return (

@@ -3,13 +3,14 @@ import { SafeAreaView, StyleSheet, ImageBackground, Animated, Keyboard, Dimensio
 
 import Input from './Input';
 import Error from './Error';
+import LogoutButton from './LogoutButton';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-const spacing = screenWidth / 12
+const spacing = screenWidth / 50
 const animationTime = screenHeight / 6.7
 const spaceBelowInput = screenWidth / 7.2
-const logoSize = screenWidth / 2.88
+const logoSize = screenWidth / 3
 
 export default function SearchScreen() {
 	const translateY = useRef(new Animated.Value(0)).current;
@@ -60,6 +61,7 @@ export default function SearchScreen() {
 				resizeMode="cover"
 			>
 				<SafeAreaView style={styles.container}>
+					<LogoutButton/>
 					<Animated.View style={[styles.animatedContainer, { transform: [{ translateY }] }]}>
 						<Animated.Image 
 							source={require('../../../assets/logo42.png')}
@@ -91,7 +93,6 @@ const styles = StyleSheet.create({
   	container: {
     	flex: 1,
     	alignItems: 'center',
-    	justifyContent: 'center',
 		backgroundColor: "#0003",
   	},
 	backgroundImage: {
