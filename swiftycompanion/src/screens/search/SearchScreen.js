@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { SafeAreaView, StyleSheet, ImageBackground, Animated, Keyboard, Dimensions, View } from 'react-native';
+import { SafeAreaView, StyleSheet, ImageBackground, Animated, Keyboard, Dimensions, View, TouchableWithoutFeedback } from 'react-native';
 
 import Input from './Input';
 import Error from './Error';
@@ -60,30 +60,32 @@ export default function SearchScreen() {
 				style={styles.backgroundImage}
 				resizeMode="cover"
 			>
-				<SafeAreaView style={styles.container}>
-					<LogoutButton/>
-					<Animated.View style={[styles.animatedContainer, { transform: [{ translateY }] }]}>
-						<Animated.Image 
-							source={require('../../../assets/logo42.png')}
-							style={[styles.logo, { opacity: opacity }]}
-						/>
-						<View style={{
-							alignItems: 'center',
-							width: '100%',
-						}}>
-							<Input/>
+				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					<SafeAreaView style={styles.container}>
+						<LogoutButton/>
+						<Animated.View style={[styles.animatedContainer, { transform: [{ translateY }] }]}>
+							<Animated.Image 
+								source={require('../../../assets/logo42.png')}
+								style={[styles.logo, { opacity: opacity }]}
+							/>
 							<View style={{
-								position: "absolute",
-								bottom: -spaceBelowInput,
 								alignItems: 'center',
-								justifyContent: 'center',
 								width: '100%',
 							}}>
-								<Error/>
+								<Input/>
+								<View style={{
+									position: "absolute",
+									bottom: -spaceBelowInput,
+									alignItems: 'center',
+									justifyContent: 'center',
+									width: '100%',
+								}}>
+									<Error/>
+								</View>
 							</View>
-						</View>
-					</Animated.View>
-				</SafeAreaView>
+						</Animated.View>
+					</SafeAreaView>
+				</TouchableWithoutFeedback>
 			</ImageBackground>
 		</>
 	);

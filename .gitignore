@@ -36,3 +36,5 @@
 **/*.tsbuildinfo
 
 **/.env
+
+ignore

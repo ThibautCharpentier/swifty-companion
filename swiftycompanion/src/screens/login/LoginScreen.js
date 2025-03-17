@@ -30,7 +30,10 @@ export default function LoginScreen() {
     const submitLogin = async () => {
         setFetch(false)
         if (await getAuthorization())
+        {
+            setErrorApi("")
             navigation.replace('SearchScreen')
+        }
         else
         {
             setFetch(true)

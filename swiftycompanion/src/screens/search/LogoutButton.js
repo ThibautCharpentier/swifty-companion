@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { revokeToken } from '../../utils/Token';
+import { useErrorApi } from '../../context/ErrorApi';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -13,9 +14,11 @@ const fontSizeBackText = screenWidth / 18
 
 export default function BackButton() {
     const navigation = useNavigation();
+    const { setErrorApi } = useErrorApi()
 
     const submitLogout = async () => {
         revokeToken()
+        setErrorApi("")
         navigation.replace("LoginScreen")
     }
   
@@ -30,7 +33,7 @@ export default function BackButton() {
 					size={sizeIonicon}
 					color="#fff"
                 />
-                <Text style={styles.backText}>
+                <Text style={styles.logoutText}>
                     Logout
                 </Text>
             </TouchableOpacity>
@@ -48,7 +51,7 @@ const styles = StyleSheet.create({
         padding: 5,
         alignSelf: "flex-start",
     },
-    backText: {
+    logoutText: {
         color: "#fff",
         fontWeight: "bold",
         fontSize: fontSizeBackText,
