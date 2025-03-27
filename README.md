@@ -1,7 +1,8 @@
 # swifty-companion
 
 <p align="center">
-  <img src="https://github.com/ThibautCharpentier/swifty-companion/blob/main/previews/search_login.png" alt="preview"/>
+  <img src="https://github.com/ThibautCharpentier/swifty-companion/blob/main/previews/loginScreen.png" alt="preview"/>
+  <img src="https://github.com/ThibautCharpentier/swifty-companion/blob/main/previews/searchScreen.png" alt="preview"/>
 </p>
 
 swifty-companion is an individual 42 school mobile project where we have to build an application that will retrieve the information of 42 students, using the **42 API**.
