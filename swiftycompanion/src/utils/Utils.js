@@ -1,6 +1,10 @@
 export function getDecimal(number) {
     const tab = number.toString().split(".")
-    return tab.length == 2 ? tab[1].substring(0, 2) : "0"
+    if (tab.length != 2)
+        return "0"
+    if (tab[1].substring(0, 2).length < 2)
+        return tab[1].substring(0, 2) + "0"
+    return tab[1].substring(0, 2)
 }
 
 export function findCursus(tab_cursus) {
